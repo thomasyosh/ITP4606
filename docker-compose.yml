@@ -1,0 +1,45 @@
+services:
+    backend:
+        build: ./backend
+        ports:
+            - 8090:8000
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - testing
+    
+    pgdb:
+        image: postgres:latest
+        restart: always
+        networks:
+            - testing
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        env_file:
+            - .env
+    
+    mysql:
+        image: mysql:latest
+        restart: always
+        env_file:
+            - .env
+        volumes:
+            - mysql_db_data_container:/var/lib/mysql
+        networks:
+            - testing
+    
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8070:8080
+        networks:
+            testing:
+    
+networks:
+    testing:
+    
+volumes:
+    postgres_data:
+    mysql_db_data_container:
