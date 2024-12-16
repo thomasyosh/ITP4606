@@ -1,3 +1,5 @@
+# Edit your environment variable in the .env file
+
 # Run the following command to uninstall all conflicting packages:
 ```
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -29,3 +31,17 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```
 sudo systemctl enable docker
 ```
+
+# run docker commands without sudo
+```
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo chown $USER /var/run/docker.sock
+newgrp docker
+```
+
+# Initialize and create a database in your RDS database
+```
+docker run -v ./backend/db/init.sh:/init.sh --env-file .env --rm postgres:latest ./init.sh
+```
+

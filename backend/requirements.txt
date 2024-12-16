@@ -2,3 +2,4 @@ fastapi[standard]
 peewee
 psycopg2
 pymysql
+requests

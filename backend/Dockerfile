@@ -2,10 +2,12 @@ FROM python:latest
 
 WORKDIR /app
 
-COPY api /app/api/
-
 COPY ./requirements.txt /app/requirements.txt
 
 RUN [ "pip", "install", "-r", "requirements.txt" ]
 
-CMD ["fastapi", "run", "api/main.py"]
+COPY --chmod=0777 ./db/init.sh /docker-entrypoint-initdb.d/init.sh
+
+COPY api /app/api/
+
+CMD [ "fastapi", "run", "api/main.py" ]
