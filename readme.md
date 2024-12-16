@@ -1,3 +1,7 @@
+# Ensure your AWS RDS parameter group is configed as follows:
+![screenshot](./rdsparamgroup.png)
+rds.force_ssl should be set as 0
+
 # Edit your environment variable in the .env file
 
 # Run the following command to uninstall all conflicting packages:
@@ -27,7 +31,7 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-# enable the docker to run as a daemon
+# Enable the docker to run as a daemon
 ```
 sudo systemctl enable docker
 ```
@@ -45,3 +49,10 @@ newgrp docker
 docker run -v ./backend/db/init.sh:/init.sh --env-file .env --rm postgres:latest ./init.sh
 ```
 
+# Run your container
+```
+cd ITP4606
+docker compose up
+```
+
+![screenshot](./screencap.png)

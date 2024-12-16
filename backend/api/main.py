@@ -24,9 +24,9 @@ elif db_type == "mysql":
         password=os.getenv("MYSQL_ROOT_PASSWORD")
     )
 
-Bms.bind(db_connection)
+Testing.bind(db_connection)
 db_connection.connect()
-db_connection.create_tables([Bms])
+db_connection.create_tables([Testing])
 
 @app.get("/")
 async def root():
