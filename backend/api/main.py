@@ -1,39 +1,34 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 import os
 from peewee import *
 import psycopg2
 import pymysql
-from model import *
+from model import Testing, BaseModel
+from post_item import Item, FormData
+from typing import Annotated
 
 app = FastAPI(title=os.getenv("PROJECT_NAME"))
 
-db_type = os.getenv("DATABASE_TYPE")
-
-if db_type == "postgres":
-    db_connection = PostgresqlDatabase(
-        os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        host=os.getenv("POSTGRES_HOST"),
-        password=os.getenv("POSTGRES_PASSWORD")
-        )
-elif db_type == "mysql":
-    db_connection = MySQLDatabase(
-        "testing",
-        user="root",
-        host="mysql",
-        password=os.getenv("MYSQL_ROOT_PASSWORD")
-    )
-
-Testing.bind(db_connection)
-db_connection.connect()
-db_connection.create_tables([Testing])
-
 @app.get("/")
 async def root():
-    # environ = os.getenv("DOCKER_DATABASE_URL")
-    return {"message": "hihihi"}
+    query = Testing.select().dicts()
+    return list(query)
+
+@app.get("/testing/{item_id}")
+async def read_item(item_id: str | None = None):
+    query = Testing().select().where(Testing.pk_id == item_id).dicts().get()
+    return query
 
 @app.post("/testing")
-async def root():
-    # environ = os.getenv("DOCKER_DATABASE_URL")
-    return {"message": db_type}
+async def root(item: Item):
+    data = Testing()
+    data.name = item.name
+    data.save()
+    return {"message": "こんにちは"}
+
+@app.put("/update")
+async def update_record(data: Annotated[FormData, Form()]) -> None:
+    update_data = Testing().update({Testing.name:data.name}).where(Testing.pk_id == data.pk_id)
+    update_data.execute()
+    query = Testing().select().where(Testing.pk_id == data.pk_id).dicts().get()
+    return query
