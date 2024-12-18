@@ -9,7 +9,7 @@ set -u
 # apt-get -y install postgresql-client
 
 create_database() {
-    PGPASSWORD="$POSTGRES_PASSWORD" psql -h "$POSTGRES_HOST" -p "5432" -U "$POSTGRES_USER"<<-EOSQL
+    PGPASSWORD="$POSTGRES_PASSWORD" psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER"<<-EOSQL
     SELECT 'CREATE DATABASE "$POSTGRES_DB"'
     WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '$POSTGRES_DB')\gexec
 EOSQL

@@ -3,6 +3,6 @@
   "directory": "migrations",
   "history": "migratehistory",
   "models": [
-    "model.Testing"
+    "model.User"
   ]
 }

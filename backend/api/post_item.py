@@ -6,6 +6,7 @@ class Item(BaseModel):
     
     
 class FormData(BaseModel):
-    pk_id: str
+    pk_id: int
     name: str
+    is_active: bool
     model_config = {"extra": "forbid"}

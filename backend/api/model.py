@@ -2,6 +2,25 @@ from peewee import *
 import os
 import datetime
 
+db_type = os.getenv("DATABASE_TYPE")
+db_connection = None
+
+if db_type == "postgres":
+    db_connection = PostgresqlDatabase(
+        os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        host=os.getenv("POSTGRES_HOST"),
+        password=os.getenv("POSTGRES_PASSWORD")
+        )
+elif db_type == "mysql":
+    db_connection = MySQLDatabase(
+        "testing",
+        user="root",
+        host="mysql",
+        password=os.getenv("MYSQL_ROOT_PASSWORD")
+    )
+
+
 class NullTextField(TextField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('null', True)
@@ -11,6 +30,10 @@ class BaseModel(Model):
     pk_id = AutoField()
     created_date = DateTimeField(default=datetime.datetime.now)
     modified_date = DateTimeField(null = True)
+    is_active = BooleanField(default=True)
+    
+    class Meta:
+        database = db_connection
 
     @classmethod
     def update(cls, *args, **kwargs):
@@ -34,27 +57,10 @@ class BaseModel(Model):
 class Testing(BaseModel):    
     name = NullTextField()
 
-class Student(BaseModel):
-    ID = NullTextField()
+class User(BaseModel):
+    name = TextField(null = True)
+    telephone = TextField(null = True)
+    password = TextField(null = True)
 
-db_type = os.getenv("DATABASE_TYPE")
-
-if db_type == "postgres":
-    db_connection = PostgresqlDatabase(
-        os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        host=os.getenv("POSTGRES_HOST"),
-        password=os.getenv("POSTGRES_PASSWORD")
-        )
-elif db_type == "mysql":
-    db_connection = MySQLDatabase(
-        "testing",
-        user="root",
-        host="mysql",
-        password=os.getenv("MYSQL_ROOT_PASSWORD")
-    )
-
-Testing.bind(db_connection)
-db_connection.connect()
-db_connection.create_tables([Testing])
+db_connection.create_tables([Testing, User])
 
