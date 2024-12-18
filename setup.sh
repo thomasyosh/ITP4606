@@ -20,3 +20,8 @@ sudo apt-get install -y docker-buildx-plugin
 sudo apt-get install -y docker-compose-plugin
 
 sudo systemctl enable docker
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo chown $USER /var/run/docker.sock
+newgrp docker
