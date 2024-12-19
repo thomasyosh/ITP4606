@@ -1,12 +1,12 @@
 services:
     frontend:
-        build: ./my-app
+        build: ./frontend
         ports: 
             - 3000:3000
         env_file:
             - .env
         volumes:
-            - ./my-app:/app
+            - ./frontend:/app
         restart: always
     
     backend:
