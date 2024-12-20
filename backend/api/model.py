@@ -14,10 +14,10 @@ if db_type == "postgres":
         )
 elif db_type == "mysql":
     db_connection = MySQLDatabase(
-        "testing",
-        user="root",
-        host="mysql",
-        password=os.getenv("MYSQL_ROOT_PASSWORD")
+        os.getenv("MYSQL_DB"),
+        user=os.getenv("MYSQL_USER"),
+        host=os.getenv("MYSQL_HOST"),
+        password=os.getenv("MYSQL_PASSWORD")
     )
 
 
