@@ -25,3 +25,6 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 sudo chown $USER /var/run/docker.sock
 newgrp docker
+
+docker run -v ./backend/db/init.sh:/init.sh --env-file .env --rm postgres:latest ./init.sh
+docker rmi $(docker images 'postgres' -a -q)
